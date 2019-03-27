@@ -1,0 +1,37 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-restplus = "*"
+flask-migrate = "*"
+coverage = "*"
+marshmallow = "==2.16.0"
+psycopg2 = "*"
+pyjwt = "*"
+pytest = "*"
+pytest-cov = "*"
+python-dotenv = "*"
+cryptography = "*"
+cloudinary = "*"
+flask-excel = "*"
+humps = "*"
+flask-cors = "*"
+faker = "*"
+redis = ">=2.10.5,<3"
+celery = "*"
+requests = "*"
+flask-mail = "*"
+marshmallow-enum = "*"
+yapf = "*"
+pyexcel-xlsxw = "*"
+pyexcel-xlsx = "*"
+
+[dev-packages]
+pylint = "*"
+yapf = "*"
+
+[requires]
+python_version = "3.7"
