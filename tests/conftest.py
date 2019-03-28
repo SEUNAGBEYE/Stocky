@@ -19,6 +19,8 @@ from api.models.config import db
 config_name = 'testing'
 os.environ['FLASK_ENV'] = config_name
 
+pytest_plugins = ['tests.fixtures.users', 'tests.fixtures.stocks']
+
 @pytest.yield_fixture(scope='session')
 def app():
     """
