@@ -9,6 +9,7 @@ from flask import jsonify
 from redis.exceptions import ConnectionError
 from flask_mail import Mail
 from sqlalchemy import text
+from flask_bcrypt import Bcrypt
 
 # Local Imports
 from api.utilities.constants import SEED_OPTIONS
@@ -25,6 +26,7 @@ config_name = getenv('FLASK_ENV', default='production')
 # create application object
 app = create_app(config[config_name])
 mail = Mail(app)
+bcrypt = Bcrypt(app)
 
 @app.route('/')
 def index():

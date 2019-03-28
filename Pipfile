@@ -28,6 +28,7 @@ marshmallow-enum = "*"
 yapf = "*"
 pyexcel-xlsxw = "*"
 pyexcel-xlsx = "*"
+flask-bcrypt = "*"
 
 [dev-packages]
 pylint = "*"
