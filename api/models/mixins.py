@@ -1,7 +1,5 @@
 """Module for generic model operations mixin."""
 
-from .config import db
-
 class ModelMixin:
     """Mixin class with generic model operations."""
 
@@ -9,9 +7,7 @@ class ModelMixin:
         """
         Save a model instance
         """
-        db.session.add(self)
-        db.session.commit()
-        return self
+        pass
 
     def update_(self, **kwargs):
         """
@@ -23,9 +19,7 @@ class ModelMixin:
         Returns:
             (dict) The updated record
         """
-        for field, value in kwargs.items():
-            setattr(self, field, value)
-        db.session.commit()
+        pass
 
     @classmethod
     def get(cls, id):
@@ -38,8 +32,7 @@ class ModelMixin:
         Returns:
             (dict) The found record
         """
-        
-        return cls.query.get(id)
+        pass
 
     @classmethod
     def get_or_404(cls, id):
@@ -55,18 +48,7 @@ class ModelMixin:
         Raises:
             (exception) Not found exeption if the record does not exist
         """
-        
-        record = cls.get(id)
-
-        if not record:
-            raise ValidationError(
-                {
-                    'message':
-                    f'{re.sub(r"(?<=[a-z])[A-Z]+",lambda x: f" {x.group(0).lower()}" , cls.__name__)} not found'  # noqa
-                },
-                404)
-
-        return record
+        pass
 
     def delete(self):
         """
@@ -79,8 +61,7 @@ class ModelMixin:
         """
         Returns the number of records that satify a query
         """
-        
-        return cls.query.count()
+        pass
 
     @classmethod
     def find_or_create(cls, data, **kwargs):
@@ -93,11 +74,7 @@ class ModelMixin:
         Returns:
             (dict) The found record or newly created record
         """
-        
-        instance = cls.query.filter_by(**kwargs).first()
-        if not instance:
-            instance = cls(**data).save()
-        return instance
+        pass
 
     @classmethod
     def bulk_create(cls, objects):
@@ -110,10 +87,5 @@ class ModelMixin:
         Returns:
             (list): A list of the newly created records
         """
-        
-        resource_list = [cls(**item) for item in objects]
-        db.session.add_all(resource_list)
-        db.session.commit()
-
-        return resource_list
+        pass
 

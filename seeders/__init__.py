@@ -4,8 +4,12 @@
 from collections import OrderedDict
 from os import getenv
 
-from .seed_users import seed_users
-from .seed_stocks import seed_stocks
+# Third party
+from sqlalchemy import text
+
+# Database
+# from api.models.config import db
+
 
 def seed_db(resource_name=None):
     """Checks the argument provided and matches it to the respective seeder
@@ -17,10 +21,7 @@ def seed_db(resource_name=None):
         func: calls a function with the resource name as arguments
     """
 
-    resource_order_mapping = OrderedDict({
-        'users': seed_users,
-        'stocks': seed_stocks
-    })
+    resource_order_mapping = OrderedDict()
 
     if resource_name:
         return resource_order_mapping.get(resource_name)()
