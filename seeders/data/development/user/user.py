@@ -1,6 +1,10 @@
 """Development/Testing environment user deed data """
 
+from faker import Faker
+
 from api.utilities.enums import IsAdmin
+
+faker = Faker()
 
 def user_data():
     """Gets user data to be seeded.
@@ -11,15 +15,17 @@ def user_data():
 
     return [
         {
-            'first_name': 'Admin',
-            'last_name': 'User',
+            'first_name': faker.name(),
+            'last_name': faker.name(),
             'email': 'admin@stocky.com',
-            'is_admin': IsAdmin.yes
+            'is_admin': IsAdmin.yes,
+            'password': faker.password(),
         },
         {
-            'first_name': 'Test',
-            'last_name': 'User',
+            'first_name': faker.name(),
+            'last_name': faker.name(),
             'email': 'test-user@stocky.com',
-            'is_admin': IsAdmin.no
+            'is_admin': IsAdmin.no,
+            'password': faker.password()
         }
     ]

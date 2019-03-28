@@ -20,14 +20,13 @@ class TestUserModel:
 
     def test_count(self, new_user):
         """Test for count of users"""
-        print('------New user', new_user.count())
         assert new_user.count() == 1
 
     def test_query(self, new_user):
         """Test for query method"""
         pass
 
-    def test_delete(self, new_user, request_ctx):
+    def test_delete(self, new_user):
         """Test for delete method"""
         new_user.delete()
 
