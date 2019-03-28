@@ -11,7 +11,7 @@ import jwt
 
 #Utilities
 from api.utilities.constants import CHARSET, DELETED_USER
-from api.messages.error_messages import jwt_errors
+from api.utilities.messages.error_messages import jwt_errors
 
 
 def get_token(http_request=request):

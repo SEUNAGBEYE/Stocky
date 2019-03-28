@@ -2,6 +2,7 @@
 
 import jwt
 from os import getenv
+from datetime import datetime, timedelta
 
 from sqlalchemy.event import listens_for
 
@@ -30,7 +31,7 @@ class User(BaseModel):
         dt = datetime.now() + timedelta(days=60)
 
         token = jwt.encode({
-            'id': self.id,
+            'id': str(self.id),
             'exp': int(dt.strftime('%s'))
         }, getenv('JWT_SECRET_KEY'), algorithm='HS256')
 
@@ -50,4 +51,6 @@ class User(BaseModel):
 @listens_for(User, 'before_insert')
 def hash_password(mapper, connection, target):
     from manage import bcrypt
-    target.password = bcrypt.generate_password_hash(target.password).decode('utf-8')
+    target.password = bcrypt.generate_password_hash(
+        target.password
+    ).decode('utf-8')
