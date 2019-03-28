@@ -6,7 +6,6 @@ import os
 
 # Third-party libraries
 import pytest
-from flask import current_app, request
 
 # Local imports
 from main import create_app
@@ -18,8 +17,12 @@ from api.models.config import db
 
 config_name = 'testing'
 os.environ['FLASK_ENV'] = config_name
+V1_BASE_URL = os.getenv('API_BASE_URL_V1')
 
-pytest_plugins = ['tests.fixtures.users', 'tests.fixtures.stocks']
+pytest_plugins = [
+    'tests.fixtures.users', 'tests.fixtures.stocks',
+    'tests.mocks.user', 'tests.fixtures.authorization'
+    ]
 
 @pytest.yield_fixture(scope='session')
 def app():
@@ -55,16 +58,3 @@ def init_db(app):
     yield db
     db.session.close()
     db.drop_all()
-
-
-@pytest.fixture(scope='module')
-def request_ctx():
-    """
-    Setup a request client, this gets executed for each test module.
-    :param app: Pytest fixture
-    :return: Flask request client
-    """
-    ctx = current_app.test_request_context()
-    ctx.push()
-    yield ctx
-    ctx.pop()

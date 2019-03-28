@@ -4,6 +4,8 @@ from flask_restplus import Resource
 from main import api
 from ..schemas.user_schema import RegistrationSchema, LoginSchema
 from ..utilities.responses.success_response import success_response
+from ..middlewares.token_required import token_required
+from ..middlewares.is_admin import is_admin
 
 
 @api.route('/users/register')
@@ -31,3 +33,16 @@ class UserLogin(Resource):
     
     def get(self):
         return 'Make a post request to login'
+
+
+@api.route('/users')
+class UserRetrievealUpdate(Resource):
+
+    @token_required
+    def patch(self):
+        return 'Authorized'
+
+    @token_required
+    @is_admin
+    def delete(self):
+        return 'Authorized'

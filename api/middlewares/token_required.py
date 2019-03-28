@@ -11,7 +11,8 @@ import jwt
 
 #Utilities
 from api.utilities.constants import CHARSET, DELETED_USER
-from api.utilities.messages.error_messages import jwt_errors
+from api.utilities.messages.error_messages.jwt import error_dict as jwt_errors
+from ..models import User
 
 
 def get_token(http_request=request):
@@ -94,7 +95,7 @@ def token_required(func):
         
         user = User.get(payload['id'])
         if not user:
-            raise exceptions.AuthenticationFailed(DELETED_USER)
+            raise ValidationError({'message': DELETED_USER})
 
         # setting the payload to the request object and can be accessed with \
         # request.decoded_token from the view

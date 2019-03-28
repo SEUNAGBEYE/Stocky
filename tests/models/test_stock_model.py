@@ -26,7 +26,7 @@ class TestStockModel:
         """Test for query method"""
         pass
 
-    def test_delete(self, new_stock, request_ctx):
+    def test_delete(self, new_stock):
         """Test for delete method"""
         new_stock.delete()
 

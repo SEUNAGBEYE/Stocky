@@ -7,6 +7,8 @@ from marshmallow_enum import EnumField
 from ..utilities.validators.email_validator import email_validator
 from ..utilities.validators.string_length_validators import string_length_validator
 from ..utilities.enums import IsAdmin
+from ..utilities.constants import ENUM_CHOICES
+from ..utilities.messages.error_messages.serialization_errors import error_dict
 from ..models import User
 
 # Schemas
@@ -37,7 +39,7 @@ class RegistrationSchema(UserSchema):
         required=True, 
         load_by=EnumField.VALUE,
         dump_by=EnumField.VALUE, 
-        error='Please provide one of {values}',
+        error=ENUM_CHOICES +' {values}',
         dump_to='isAdmin',
         load_from='isAdmin'
         )
@@ -46,7 +48,7 @@ class RegistrationSchema(UserSchema):
     def validate_email(self, value):
         user = User.query.filter_by(email=value).first()
         if user:
-            raise ValidationError('User Already exists')
+            raise ValidationError(error_dict['user_exists'])
 
 
     def register(self, data):
@@ -61,7 +63,7 @@ class LoginSchema(UserSchema):
 
         user = User.query.filter_by(email=data['email']).first()
         if not user or not bcrypt.check_password_hash(user.password, data['password']):
-            raise ValidationError({'error': 'Incorrect password or email'})
+            raise ValidationError({'error': error_dict['invalid_email_or_pass']})
         
         self.context['user'] = user
 
