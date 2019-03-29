@@ -22,16 +22,16 @@ api = Api(api_blueprint, doc=False)
 
 # Celery object and configures it with the broker (redis).
 # __name__ is the app.name, which will be initialized later
-TASK_LIST = []
+TASK_LIST = ['api.tasks.send_stock_notification']
 
 celery_app = Celery(
     __name__, broker=Config.CELERY_BROKER_URL, include=TASK_LIST)
 
 
-def initialize_blueprints(application):
+def initialize_blueprints(app):
     '''Initialize error handlers'''
-    application.register_blueprint(middleware_blueprint)
-    application.register_blueprint(api_blueprint)
+    app.register_blueprint(middleware_blueprint)
+    app.register_blueprint(api_blueprint)
 
 
 def create_app(config=config[config_name]):
@@ -42,7 +42,7 @@ def create_app(config=config[config_name]):
     celery_app.conf.update(app.config)
     app.url_map.strict_slashes = False
 
-    # initialize blue prints
+    # initialize blueprints
     initialize_blueprints(app)
 
     # bind app to db
@@ -53,9 +53,6 @@ def create_app(config=config[config_name]):
 
     # import views
     import api.views
-
-    # register celery tasks
-    import api.tasks
 
     # initialize migration scripts
     migrate = Migrate(app, db)

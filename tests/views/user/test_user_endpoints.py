@@ -1,4 +1,4 @@
-"""Module for edit person endpoint"""
+"""Module for user endpoints"""
 
 from os import getenv
 from flask import json

@@ -99,7 +99,7 @@ def celery_stats():
     except Exception:
         msg = {"status": "Celery down"}
 
-    return jsonify(dict(message=msg)), 200
+    return jsonify(dict(data=msg, message='Success')), 200
 
 
 @app.route('/celery-beat/health')
