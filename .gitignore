@@ -11,8 +11,4 @@ htmlcov
 .coverage*
 /redis-stable
 dump.rdb
-celerybeat-schedule.db
-celerybeat-schedule.bak
-celerybeat-schedule.dat
-celerybeat-schedule.dir
-celerybeat.pid
+celerybeat*

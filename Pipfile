@@ -26,13 +26,13 @@ requests = "*"
 flask-mail = "*"
 marshmallow-enum = "*"
 yapf = "*"
-pyexcel-xlsxw = "*"
-pyexcel-xlsx = "*"
 flask-bcrypt = "*"
+filteralchemy = "*"
+pyexcel-io = "*"
 
 [dev-packages]
 pylint = "*"
 yapf = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.6.5"

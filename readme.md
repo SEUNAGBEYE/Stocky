@@ -24,5 +24,40 @@ APIs for a stock broking firm that allows them to upload daily stock prices, and
 #### Security
 This application uses JWT for user authentication and authorization
 
+- **Running Redis server**
+     - Run `bash redis.sh` in the root project directory, this will install redis for you (if not already installed) and also run/start the redis server for the first time on your local machine.
+  
+
+##  Running Celery worker
+
+  - Update the `.env` file with the following keys and the appropriate values(`redis_server_url`):
+       ```
+        CELERY_BROKER_URL=<Your_Redis_Server_URL>
+        CELERY_RESULT_BACKEND=<Your_Redis_Server_URL>
+      ```
+
+
+      The update above must be done before you do `flask run`
+
+  
+   *Restart **redis/celery***
+
+   - To run redis after it has been stopped run `redis-server`
+  
+   - In a new terminal tab run the Celery Message Worker with:
+   
+        ```
+          celery -A main --loglevel=info
+        ```
+   
+##  Running Celery beat
+  - After setting up the Celery worker, you need to start the `celery-beat` used to to trigger `celery` scheduled tasks
+  
+  - In a new terminal tab start `celery-beat` with:
+   
+    ```
+      celery -A main beat -l INFO
+    ```
+
 #### Application Url
 Coming soon!
