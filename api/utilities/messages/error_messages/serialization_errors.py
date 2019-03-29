@@ -6,8 +6,10 @@ error_dict = {
     'must_be_less_than': 'This field must be less than {} characters',
     'invalid_email_or_pass': 'Incorrect password or email',
     'user_exists': 'User Already exists',
-    'invalid_query_strings': '{0} contains invalid parameter {1}',
+    'invalid_query': 'Invalid query supplied',
     'last_page_returned':
     'The requested page exceeds the total pages count, however the last page was returned',
+    'invalid_file_type': 'File type not supported',
+    'no_file': 'No file uploaded'
     
 }

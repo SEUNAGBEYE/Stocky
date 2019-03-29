@@ -21,14 +21,16 @@ V1_BASE_URL = os.getenv('API_BASE_URL_V1')
 
 pytest_plugins = [
     'tests.fixtures.users', 'tests.fixtures.stocks',
-    'tests.mocks.user', 'tests.fixtures.authorization'
+    'tests.mocks.user', 'tests.fixtures.authorization',
     ]
 
 @pytest.yield_fixture(scope='session')
 def app():
     """
     Setup our flask test app, this only gets executed once.
-    :return: Flask app
+
+    Returns:
+        Flask app
     """
 
     _app = create_app(config[config_name])
@@ -46,8 +48,13 @@ def app():
 def client(app):
     """
     Setup an app client, this gets executed for each test function.
-    :param app: Pytest fixture
-    :return: Flask app client
+
+
+    Args:
+        app: Pytest fixture
+
+    Returns: 
+        Flask app client
     """
     yield app.test_client()
 

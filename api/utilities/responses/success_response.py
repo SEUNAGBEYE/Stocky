@@ -1,7 +1,7 @@
 """Module for response"""
 from flask import jsonify
 
-def success_response(data, message, status_code=200):
+def success_response(data, message, status_code=200, **kwargs):
     """Returns response for successfull requests
     Args:
         data (dict): Response data
@@ -16,5 +16,6 @@ def success_response(data, message, status_code=200):
     return {
         'status': 'Success',
         'message': message,
-        'data': data
+        'data': data,
+        **kwargs
     }, status_code

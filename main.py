@@ -28,10 +28,10 @@ celery_app = Celery(
     __name__, broker=Config.CELERY_BROKER_URL, include=TASK_LIST)
 
 
-def initialize_blueprints(application):
+def initialize_blueprints(app):
     '''Initialize error handlers'''
-    application.register_blueprint(middleware_blueprint)
-    application.register_blueprint(api_blueprint)
+    app.register_blueprint(middleware_blueprint)
+    app.register_blueprint(api_blueprint)
 
 
 def create_app(config=config[config_name]):
@@ -42,7 +42,7 @@ def create_app(config=config[config_name]):
     celery_app.conf.update(app.config)
     app.url_map.strict_slashes = False
 
-    # initialize blue prints
+    # initialize blueprints
     initialize_blueprints(app)
 
     # bind app to db

@@ -1,3 +1,5 @@
+"""Stock View Module"""
+
 from flask import request
 from flask_restplus import Resource
 import pyexcel as pe
@@ -13,6 +15,8 @@ from ..models.config import db
 
 from ..utilities.paginator import pagination_helper
 from ..middlewares.base_validator import ValidationError
+
+from ..utilities.messages.error_messages.serialization_errors import error_dict
 
 
 @api.route('/stocks')
@@ -33,20 +37,25 @@ class StockResource(Resource):
         value = request.args.get('value')
     
         if search_column and query:
+
             query = Stock.query.filter(query(value))
         else:
             query = Stock.query
-
-        stock_data = pagination_helper(Stock, StockSchema, query)
-        return success_response(stock_data, 'Stock successfully fetched')
+        try:
+            stock_data, meta = pagination_helper(Stock, StockSchema, query)
+        except:
+            raise ValidationError({'message': error_dict['invalid_query']})
+        return success_response(stock_data, 'Stock successfully fetched', meta=meta)
     
     def validate_file(self, file):
+        """"Validates the file uploaded
+        """
         empty_file_names = ['3e9', '527']
         if not file or file and file.filename in empty_file_names:
-            raise ValidationError({'message': 'No file uploaded'})
+            raise ValidationError({'message': error_dict['no_file']})
         extension = file.filename.split(".")[-1]
         if not extension == 'csv':
-            raise ValidationError({'message': 'File type not supported'})
+            raise ValidationError({'message': error_dict['invalid_file_type']})
         return file, extension
 
     @token_required
@@ -54,7 +63,6 @@ class StockResource(Resource):
     def post(self):
         data, extension = self.validate_file(request.files.get('file'))
         content = data.read().decode('utf-8')
-
         pe.save_as(
             file_type=extension,
             file_content=content, name_columns_by_row=0,
@@ -62,4 +70,4 @@ class StockResource(Resource):
         )
 
         stock_data = StockSchema(many=True).dump(Stock.query.all()).data
-        return success_response(stock_data, 'Stocks successfully uploaded')
+        return success_response(stock_data, 'Stocks successfully uploaded', 201)

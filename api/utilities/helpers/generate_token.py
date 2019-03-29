@@ -18,13 +18,13 @@ def generate_token(exp=None):
     """
     Generates jwt tokens for testing purpose
 
-    params:
+    Args:
         exp: Token Expiration. This could be datetime object or an integer
-    result:
+    Returns:
         token: This is the bearer token in this format 'Bearer token'
     """
 
-    secret_key = getenv('SECRET_KEY')
+    secret_key = getenv('JWT_SECRET_KEY')
     user = {
         'first_name': fake.name(),
         'last_name': fake.name(),
