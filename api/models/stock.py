@@ -1,5 +1,7 @@
 """Module for Stock model."""
 
+from datetime import datetime
+
 from api.models.base import BaseModel
 
 # Database
@@ -17,6 +19,7 @@ class Stock(BaseModel):
     highest_price = db.Column(db.Float(), nullable=False)
     lowest_price = db.Column(db.Float(), nullable=False)
     number_of_shares = db.Column(db.Integer(), nullable=False)
+    price_date = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
 
     def __repr__(self):
         return f'<Stock {self.stock_name}>'
