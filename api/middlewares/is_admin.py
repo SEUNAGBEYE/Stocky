@@ -11,7 +11,7 @@ from api.utilities.enums import IsAdmin
 
 
 def is_admin(func):
-    """Authentication decorator. Validates token from the client
+    """Validates the token provided is an admin token
 
     Args:
         func (function): Function to be decorated

@@ -1,8 +1,12 @@
 """Stock View Module"""
 
+from datetime import datetime
+from re import sub
+
 from flask import request
 from flask_restplus import Resource
 import pyexcel as pe
+from sqlalchemy import func
 
 
 from main import api
@@ -12,36 +16,83 @@ from ..middlewares.token_required import token_required
 from ..middlewares.is_admin import is_admin
 from ..models import Stock
 from ..models.config import db
-
 from ..utilities.paginator import pagination_helper
 from ..middlewares.base_validator import ValidationError
-
 from ..utilities.messages.error_messages.serialization_errors import error_dict
 
 
 @api.route('/stocks')
 class StockResource(Resource):
+
+
+    @classmethod
+    def to_snake_case(cls, string):
+        """
+        Converts a string in PascalCase or camelCase to snake_case one
+        """
+        return sub(r'(.)([A-Z])', r'\1_\2', string).lower()
+
+    def process_query(self, column, op, value):
+        """"Generates a filter query for a query params
+
+        Args:
+            column (sqlalchemmy.column): An instance of sqlalchemy column instance
+            op (str): The operator for the query. ie =, <, >=, <=, ....
+            value (str) The value to search for
+        
+        Returns:
+            (query_object): Sqlalachemy query object
+        """
+        try:
+            value = datetime.strptime(value, '%Y-%m-%d')
+            column = func.DATE(column)
+        except:
+            pass
+        
+        # Maps the supported operators to their logical repr
+        operators = {
+            'lte': column <= value,
+            '=': column == value if isinstance(value, datetime) else column.ilike(value),
+            'gte': column >= value,
+            'gt': column > value,
+            'lt': column < value,
+        }
+        return operators.get(op)
     
+    def process_queries(self, queries):
+        """"Transforms the query params to what acceptable 
+        self.process_query arguments
+
+        Args:
+            queries (list) A list of query objects
+        """
+
+        columns = Stock.__mapper__.columns # Gets all the column of the model
+
+        for query_param, value in request.args.items():
+            key_op = query_param.split('__') # Splits __ from the column name createdAt__lt ---> createdAt
+            key, op = key_op if len(key_op) == 2 else (query_param, '=')
+            column = columns.get(self.to_snake_case(key))
+            if column is not None:
+                queries.append(
+                    self.process_query(column, op, value)
+                )
+
     @token_required
     def get(self):
 
-        query_mapper = {
-            'stockName': lambda value: Stock.stock_name.ilike(value),
-            'startCreatedAt': lambda value: Stock.created_at >= value,
-            'endCreatedAt': lambda value: Stock.created_at <= value,
-        }
+        queries = []
+        
+        if request.args.get('filter', '').lower() == 'true':
+            self.process_queries(queries)
 
-        search_column = request.args.get('key')
-        query = query_mapper.get(search_column)
-
-        value = request.args.get('value')
-    
-        if search_column and query:
-
-            query = Stock.query.filter(query(value))
+        if queries:
+            query = Stock.query.filter(*queries) # spreads the queries to the filter func
         else:
             query = Stock.query
+    
         try:
+            # Pass the filter query to pagination helper for pagination
             stock_data, meta = pagination_helper(Stock, StockSchema, query)
         except:
             raise ValidationError({'message': error_dict['invalid_query']})
