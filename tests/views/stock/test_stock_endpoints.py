@@ -123,7 +123,7 @@ class TestStockEndpoint:
         Should return a list of paginated stocks with a status code of 200
         """
         response = client.get(
-            f'{API_V1_BASE_URL}/stocks?key=startCreatedAt&value=10',
+            f'{API_V1_BASE_URL}/stocks?filter=true&createdAt=10',
             headers=auth_header
         )
 

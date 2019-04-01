@@ -31,7 +31,7 @@ bcrypt = Bcrypt(app)
 @app.route('/')
 def index():
     """Process / routes and returns 'Welcome to the Stock API' as json."""
-    return jsonify(dict(message='Welcome to the Stock API api'))
+    return jsonify(dict(message='Welcome to the Stock API'))
 
 
 @app.route('/health')

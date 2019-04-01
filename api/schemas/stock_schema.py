@@ -32,3 +32,4 @@ class StockSchema(BaseSchema):
         required=True,
         dump_to='numberOfShares'
     )
+    price_date = fields.DateTime(dump_to='priceDate')
